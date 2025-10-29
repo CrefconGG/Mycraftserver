@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Minecraft Cloud Control</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Minecraft Cloud Server Manager</h1>
+
+  <section id="upload">
+    <h2>Upload New World</h2>
+    <input type="file" id="worldFile">
+    <input type="text" id="worldName" placeholder="Enter world name">
+    <button onclick="uploadWorld()">Upload</button>
+  </section>
+
+  <section id="worlds">
+    <h2>Available Worlds</h2>
+    <div id="worldList"></div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
