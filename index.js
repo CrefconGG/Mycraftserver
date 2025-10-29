@@ -1,6 +1,6 @@
 // index.js
 
-const launch = require('./launchWolrd');
+const launch = require('./launchWorld');
 const create = require('./createWorld');
 const stop = require('./stopWorld');
 const list = require('./listWorlds');
