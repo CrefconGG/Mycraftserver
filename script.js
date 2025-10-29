@@ -86,16 +86,17 @@ async function stopWorld(worldName) {
   listWorlds();
 }
 //edit world name
-async function editWorldPrompt(oldName) {
-  const newName = prompt(`Rename world "${oldName}" to:`);
+async function editWorldPrompt(displayName) {
+  const newName = prompt(`Rename world "${displayName}" to:`);
   if (!newName) return;
 
   await fetch(`${API_BASE}worlds/edit`, {
     method: "PUT",
-    body: JSON.stringify({ oldName, newName }),
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ displayName, newName }),
   });
 
-  alert(`Renamed ${oldName} to ${newName}`);
+  alert(`Renamed ${displayName} to ${newName}`);
   listWorlds();
 }
 
