@@ -1,0 +1,31 @@
+body {
+  font-family: sans-serif;
+  margin: 30px;
+  background-color: #111;
+  color: #eee;
+}
+
+h1 {
+  color: #00ff99;
+}
+
+button {
+  margin: 5px;
+  padding: 10px;
+  border: none;
+  background: #00ff99;
+  color: black;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #00cc7a;
+}
+
+section {
+  border: 1px solid #444;
+  padding: 15px;
+  margin-top: 20px;
+  border-radius: 8px;
+}

@@ -1,4 +1,4 @@
-const API_BASE = "https://0n63psw8x9.execute-api.us-east-1.amazonaws.com/";
+const API_BASE = "https://0n63psw8x9.execute-api.us-east-1.amazonaws.com/test1";
 
 async function uploadWorld() {
   const fileInput = document.getElementById("worldFile");
