@@ -57,11 +57,11 @@ async function listWorlds() {
     const div = document.createElement("div");
     div.className = "world-card";
     div.innerHTML = `
-      <span><b>${world.worldName}</b> - ${world.status}</span>
+      <span><b>${world.displayName}</b> - ${world.status}</span>
       <div>
-        <button onclick="launchWorld('${world.worldName}')">Launch</button>
-        <button onclick="stopWorld('${world.worldName}')">Stop</button>
-        <button onclick="editWorldPrompt('${world.worldName}')">Edit</button>
+        <button onclick="launchWorld('${world.displayName}')">Launch</button>
+        <button onclick="stopWorld('${world.displayName}')">Stop</button>
+        <button onclick="editWorldPrompt('${world.displayName}')">Edit</button>
       </div>
     `;
     container.appendChild(div);
