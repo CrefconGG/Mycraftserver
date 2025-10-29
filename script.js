@@ -1,4 +1,4 @@
-const API_BASE = "https://0n63psw8x9.execute-api.us-east-1.amazonaws.com/test1";
+const API_BASE = "https://0n63psw8x9.execute-api.us-east-1.amazonaws.com/test1/";
 
 async function uploadWorld() {
   const fileInput = document.getElementById("worldFile");
@@ -15,7 +15,7 @@ async function uploadWorld() {
   const worldId = `${worldName.replace(/[^a-z0-9]/gi, '_')}.zip`; // worldId ควรเป็น unique key
 
   // Get presigned URL
-  const presignRes = await fetch(`${API_BASE}/worlds/upload`, {
+  const presignRes = await fetch(`${API_BASE}worlds/upload`, {
     method: "POST",
     // ส่งชื่อไฟล์ (worldId) ไปให้ presignUpload
     body: JSON.stringify({ filename: worldId }),
@@ -37,7 +37,7 @@ async function uploadWorld() {
   });
 
   //  Save metadata in DynamoDB (Path ถูกแก้ในข้อ 1.1 แล้ว)
-  await fetch(`${API_BASE}/worlds`, {
+  await fetch(`${API_BASE}worlds`, {
     method: "POST",
     // ส่ง worldId, displayName และ s3Key
     body: JSON.stringify({ worldId, displayName: worldName, s3Key }), 
@@ -48,7 +48,7 @@ async function uploadWorld() {
 }
 //show all worlds
 async function listWorlds() {
-  const res = await fetch(`${API_BASE}/worlds`, {method: "GET"});
+  const res = await fetch(`${API_BASE}worlds`, {method: "GET"});
   const data = await res.json();
   const container = document.getElementById("worldList");
   container.innerHTML = "";
@@ -69,7 +69,7 @@ async function listWorlds() {
 }
 //start world
 async function launchWorld(worldName) {
-  await fetch(`${API_BASE}/worlds/launch`, {
+  await fetch(`${API_BASE}worlds/launch`, {
     method: "POST",
     body: JSON.stringify({ worldName }),
   });
@@ -78,7 +78,7 @@ async function launchWorld(worldName) {
 }
 //stop world
 async function stopWorld(worldName) {
-  await fetch(`${API_BASE}/worlds/stop`, {
+  await fetch(`${API_BASE}worlds/stop`, {
     method: "POST",
     body: JSON.stringify({ worldName }),
   });
@@ -90,7 +90,7 @@ async function editWorldPrompt(oldName) {
   const newName = prompt(`Rename world "${oldName}" to:`);
   if (!newName) return;
 
-  await fetch(`${API_BASE}/worlds/edit`, {
+  await fetch(`${API_BASE}worlds/edit`, {
     method: "PUT",
     body: JSON.stringify({ oldName, newName }),
   });
