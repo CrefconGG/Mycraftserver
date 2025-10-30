@@ -69,42 +69,44 @@ async function listWorlds() {
   const container = document.getElementById("worldList");
   container.innerHTML = "";
 
+  const anyRunning = data.some(w => w.status === "running");
+
   data.forEach(world => {
-  const div = document.createElement("div");
-  div.className = "world-card";
+    const div = document.createElement("div");
+    div.className = "world-card";
 
-  const isLoading = loadingWorldId === world.worldId;
-  const launchText = isLoading && loadingAction === 'launch' ? 'Launching...' : 'Launch';
-  const stopText = isLoading && loadingAction === 'stop' ? 'Stopping...' : 'Stop';
-  const launchSpinner = isLoading && loadingAction === 'launch' ? '<span class="spinner"></span>' : '';
-  const stopSpinner = isLoading && loadingAction === 'stop' ? '<span class="spinner"></span>' : '';
+    const isLoading = loadingWorldId === world.worldId;
+    const launchText = isLoading && loadingAction === 'launch' ? 'Launching...' : 'Launch';
+    const stopText = isLoading && loadingAction === 'stop' ? 'Stopping...' : 'Stop';
+    const launchSpinner = isLoading && loadingAction === 'launch' ? '<span class="spinner"></span>' : '';
+    const stopSpinner = isLoading && loadingAction === 'stop' ? '<span class="spinner"></span>' : '';
 
-  div.innerHTML = `
-    <div class="world-header">
-      <span class="world-name">${world.displayName}</span>
-      <span class="status status-${world.status}">${world.status}</span>
-    </div>
-    <div class="world-info">Last modified: ${new Date(world.lastModified).toLocaleString()}</div>
-    <div class="world-buttons">
-      <button class="btn green" onclick="launchWorld('${world.worldId}')" 
-        ${world.status === 'running' || anyRunning || isLoading ? 'disabled' : ''}>
-        ${launchText} ${launchSpinner}
-      </button>
-      <button class="btn red" onclick="stopWorld('${world.worldId}')" 
-        ${world.status === 'stopped' || isLoading ? 'disabled' : ''}>
-        ${stopText} ${stopSpinner}
-      </button>
-      <button class="btn blue" onclick="editWorldPrompt('${world.worldId}', '${world.displayName}')" 
-        ${world.status === 'running' || isLoading ? 'disabled' : ''}>Edit</button>
-      <button class="btn orange" onclick="deleteWorld('${world.worldId}')" 
-        ${world.status === 'running' || isLoading ? 'disabled' : ''}>Delete</button>
-    </div>
-  `;
+    div.innerHTML = `
+      <div class="world-header">
+        <span class="world-name">${world.displayName}</span>
+        <span class="status status-${world.status}">${world.status}</span>
+      </div>
+      <div class="world-info">Last modified: ${new Date(world.lastModified).toLocaleString()}</div>
+      <div class="world-buttons">
+        <button class="btn green" onclick="launchWorld('${world.worldId}')" 
+          ${world.status === 'running' || anyRunning || isLoading ? 'disabled' : ''}>
+          ${launchText} ${launchSpinner}
+        </button>
+        <button class="btn red" onclick="stopWorld('${world.worldId}')" 
+          ${world.status === 'stopped' || isLoading ? 'disabled' : ''}>
+          ${stopText} ${stopSpinner}
+        </button>
+        <button class="btn blue" onclick="editWorldPrompt('${world.worldId}', '${world.displayName}')" 
+          ${world.status === 'running' || isLoading ? 'disabled' : ''}>Edit</button>
+        <button class="btn orange" onclick="deleteWorld('${world.worldId}')" 
+          ${world.status === 'running' || isLoading ? 'disabled' : ''}>Delete</button>
+      </div>
+    `;
 
-  container.appendChild(div);
-});
-
+    container.appendChild(div);
+  });
 }
+
 
 
 //start world
