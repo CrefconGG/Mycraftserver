@@ -13,11 +13,25 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  background-image: url('./images/mineCraft-bg.jpg'); /* ใส่ path ของภาพ bg ของคุณ */
+  background-size: cover;      /* ปรับให้เต็มหน้าจอ */
+  background-repeat: no-repeat;
+  background-position: center;
+  color: #eaeaea; /* ให้ข้อความอ่านง่ายบนพื้นหลัง */
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.3); /* ครึ่งโปร่ง */
+  z-index: -1;
 }
 
 h1 {
   margin-top: 40px;
-  font-size: 2rem;
+  font-size: 4rem;
   letter-spacing: 1px;
   color: #00c851;
   text-align: center;
