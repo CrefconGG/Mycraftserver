@@ -194,4 +194,33 @@ async function deleteWorld(worldId, displayName) {
     alert(`Failed to delete: ${err}`);
   }
 }
+
+function copyServerIp() {
+  const ipSpan = document.querySelector("#server-ip-panel .ip");
+  const ipText = ipSpan.textContent;
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(ipText)
+      .then(() => {
+        alert(`Copied IP: ${ipText}`);
+      })
+      .catch(err => {
+        console.error("Failed to copy IP:", err);
+      });
+  } else {
+    // Fallback แบบใช้ input
+    const tempInput = document.createElement("input");
+    tempInput.value = ipText;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    try {
+      document.execCommand("copy");
+      alert(`Copied IP: ${ipText}`);
+    } catch (err) {
+      console.error("Fallback copy failed", err);
+    }
+    document.body.removeChild(tempInput);
+  }
+}
+
 listWorlds();
