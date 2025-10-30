@@ -70,36 +70,47 @@ async function listWorlds() {
   container.innerHTML = "";
 
   const anyRunning = data.some(w => w.status === "running");
+  const anyLoading = loadingWorldId !== null;
 
   data.forEach(world => {
     const div = document.createElement("div");
     div.className = "world-card";
 
     const isLoading = loadingWorldId === world.worldId;
+
     const launchText = isLoading && loadingAction === 'launch' ? 'Launching...' : 'Launch';
-    const stopText = isLoading && loadingAction === 'stop' ? 'Stopping...' : 'Stop';
+    const stopText   = isLoading && loadingAction === 'stop'   ? 'Stopping...'  : 'Stop';
     const launchSpinner = isLoading && loadingAction === 'launch' ? '<span class="spinner"></span>' : '';
-    const stopSpinner = isLoading && loadingAction === 'stop' ? '<span class="spinner"></span>' : '';
+    const stopSpinner   = isLoading && loadingAction === 'stop'   ? '<span class="spinner"></span>' : '';
+
+    // Disable logic:
+    const disableLaunch = world.status === 'running' || anyRunning || anyLoading;
+    const disableStop   = world.status === 'stopped' || anyLoading;
+    const disableOther  = anyLoading; // edit/delete disabled while any loading
+
+    // Status color mapping
+    const statusColor = world.status === 'running' ? 'status-green' :
+                        world.status === 'stopped' ? 'status-gray' : 'status-yellow';
 
     div.innerHTML = `
       <div class="world-header">
         <span class="world-name">${world.displayName}</span>
-        <span class="status status-${world.status}">${world.status}</span>
+        <span class="status ${statusColor}">${world.status}</span>
       </div>
       <div class="world-info">Last modified: ${new Date(world.lastModified).toLocaleString()}</div>
       <div class="world-buttons">
-        <button class="btn green" onclick="launchWorld('${world.worldId}')" 
-          ${world.status === 'running' || anyRunning || isLoading ? 'disabled' : ''}>
+        <button class="btn green" onclick="launchWorld('${world.s3Key}', '${world.worldId}')" ${disableLaunch ? 'disabled' : ''}>
           ${launchText} ${launchSpinner}
         </button>
-        <button class="btn red" onclick="stopWorld('${world.worldId}')" 
-          ${world.status === 'stopped' || isLoading ? 'disabled' : ''}>
+        <button class="btn red" onclick="stopWorld('${world.worldId}')" ${disableStop ? 'disabled' : ''}>
           ${stopText} ${stopSpinner}
         </button>
-        <button class="btn blue" onclick="editWorldPrompt('${world.worldId}', '${world.displayName}')" 
-          ${world.status === 'running' || isLoading ? 'disabled' : ''}>Edit</button>
-        <button class="btn orange" onclick="deleteWorld('${world.worldId}')" 
-          ${world.status === 'running' || isLoading ? 'disabled' : ''}>Delete</button>
+        <button class="btn blue" onclick="editWorldPrompt('${world.worldId}', '${world.displayName}')" ${disableOther ? 'disabled' : ''}>
+          Edit
+        </button>
+        <button class="btn orange" onclick="deleteWorld('${world.worldId}', '${world.displayName}')" ${disableOther ? 'disabled' : ''}>
+          Delete
+        </button>
       </div>
     `;
 
@@ -110,7 +121,7 @@ async function listWorlds() {
 
 
 //start world
-async function launchWorld(s3Key) {
+async function launchWorld(s3Key, worldId) {
   if (loadingWorldId) return;
   loadingWorldId = worldId;
   loadingAction = 'launch';
