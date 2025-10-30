@@ -86,11 +86,10 @@ async function listWorlds() {
     // Disable logic:
     const disableLaunch = world.status === 'running' || anyRunning || anyLoading;
     const disableStop   = world.status === 'stopped' || anyLoading;
-    const disableOther  = anyLoading; // edit/delete disabled while any loading
+    const disableOther  = anyLoading;
 
-    // Status color mapping
-    const statusColor = world.status === 'running' ? 'status-green' :
-                        world.status === 'stopped' ? 'status-gray' : 'status-yellow';
+    
+    const statusColor = world.status === 'running' ? 'status-green' : 'status-red';
 
     div.innerHTML = `
       <div class="world-header">

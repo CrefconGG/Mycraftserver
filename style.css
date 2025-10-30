@@ -192,9 +192,8 @@ button[onclick*="uploadWorld"] {
   font-weight: 600;
   text-transform: capitalize;
 }
-.status-yellow { background: #ffcc00; color: #222; }
+
 .status-green { background: #00c851; color: #fff; }
-.status-gray  { background: #666; color: #fff; }
 .status-red   { background: #ff4444; color: #fff; }
 
 /* Info text (created date) */
