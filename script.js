@@ -1,5 +1,7 @@
 const API_BASE = "https://0n63psw8x9.execute-api.us-east-1.amazonaws.com/test1/";
 let isLoading = false;
+let loadingWorldId = null;
+let loadingAction = null;
 async function uploadWorld() {
   const fileInput = document.getElementById("worldFile");
   const nameInput = document.getElementById("worldName");
@@ -107,26 +109,36 @@ async function listWorlds() {
 
 //start world
 async function launchWorld(s3Key) {
-  if (isLoading) return;
-  isLoading = true;
+  if (loadingWorldId) return;
+  loadingWorldId = worldId;
+  loadingAction = 'launch';
+  listWorlds();
   await fetch(`${API_BASE}worlds/launch`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ s3Key }), // ส่ง s3Key แทน worldId
   });
   alert(`Launching ${s3Key}`);
-  isLoading = false;
+  loadingWorldId = null;
+  loadingAction = null;
   listWorlds();
 }
 
 //stop world
 async function stopWorld(worldId) {
+  if (loadingWorldId) return;
+  loadingWorldId = worldId;
+  loadingAction = 'stop';
+  listWorlds();
   await fetch(`${API_BASE}worlds/stop`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ worldId }),
   });
   alert(`Stopping ${worldId}`);
+  
+  loadingWorldId = null;
+  loadingAction = null;
   listWorlds();
 }
 
