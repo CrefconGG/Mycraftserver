@@ -28,6 +28,8 @@ exports.handler = async (event) => {
             return await edit.handler(event);
         } else if (path === '/worlds/upload' && httpMethod === 'POST') {
             return await presign.handler(event);
+        } else if (path === '/worlds/delete' && httpMethod === 'DELETE') {
+            return await presign.handler(event);
         }
 
         return {

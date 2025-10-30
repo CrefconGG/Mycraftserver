@@ -70,17 +70,36 @@ async function listWorlds() {
   data.forEach(world => {
     const div = document.createElement("div");
     div.className = "world-card";
+
+    const lastModified = new Date(world.lastModified || world.timestamp || Date.now())
+      .toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" });
+
+    const statusClass = {
+      starting: "status-yellow",
+      running: "status-green",
+      stopped: "status-gray",
+      error: "status-red"
+    }[world.status?.toLowerCase()] || "status-gray";
+
     div.innerHTML = `
-      <span><b>${world.displayName}</b> - ${world.status}</span>
-      <div>
-        <button onclick="launchWorld('${world.s3Key}')">Launch</button>
-        <button onclick="stopWorld('${world.worldId}')">Stop</button>
-        <button onclick="editWorldPrompt('${world.worldId}', '${world.displayName}')">Edit</button>
+      <div class="world-header">
+        <span class="world-name"><b>${world.displayName}</b></span>
+        <span class="status ${statusClass}">${world.status || "Unknown"}</span>
+      </div>
+      <div class="world-info">
+        <small>Created: ${lastModified}</small>
+      </div>
+      <div class="world-buttons">
+        <button class="btn blue" onclick="launchWorld('${world.s3Key}')">Launch</button>
+        <button class="btn orange" onclick="stopWorld('${world.worldId}')">Stop</button>
+        <button class="btn green" onclick="editWorldPrompt('${world.worldId}', '${world.displayName}')">Edit</button>
+        <button class="btn red" onclick="deleteWorldPrompt('${world.worldId}', '${world.displayName}')">Delete</button>
       </div>
     `;
     container.appendChild(div);
   });
 }
+
 
 //start world
 async function launchWorld(s3Key) {
@@ -125,5 +144,23 @@ async function editWorldPrompt(worldId, displayName) {
 
   alert(`Renamed "${displayName}" to "${newName}"`);
   listWorlds();
+}
+
+async function deleteWorld(worldId, displayName) {
+  if (!confirm(`Are you sure you want to delete "${displayName}"?`)) return;
+
+  const res = await fetch(`${API_BASE}worlds/delete`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ worldId }),
+  });
+
+  if (res.ok) {
+    alert(`Deleted "${displayName}"`);
+    listWorlds();
+  } else {
+    const err = await res.text();
+    alert(`Failed to delete: ${err}`);
+  }
 }
 listWorlds();

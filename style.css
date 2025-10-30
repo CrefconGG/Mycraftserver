@@ -1,31 +1,92 @@
-body {
-  font-family: sans-serif;
-  margin: 30px;
-  background-color: #111;
-  color: #eee;
+/* Layout */
+#worldList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin: 20px auto;
+  max-width: 700px;
+  font-family: "Segoe UI", Roboto, sans-serif;
 }
 
-h1 {
-  color: #00ff99;
+/* Card */
+.world-card {
+  background: #1e1e1e;
+  color: #eaeaea;
+  border-radius: 12px;
+  padding: 16px 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.world-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
 }
 
-button {
-  margin: 5px;
-  padding: 10px;
+/* Header */
+.world-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.world-name {
+  font-size: 1.1rem;
+}
+
+/* Created Info */
+.world-info {
+  margin-top: 6px;
+  color: #aaa;
+}
+
+/* Buttons */
+.world-buttons {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.btn {
   border: none;
-  background: #00ff99;
-  color: black;
   border-radius: 6px;
+  padding: 6px 12px;
   cursor: pointer;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: opacity 0.2s ease, transform 0.1s ease;
+}
+.btn:hover {
+  opacity: 0.9;
+  transform: scale(1.03);
 }
 
-button:hover {
-  background: #00cc7a;
-}
+/* Button colors */
+.btn.blue { background: #0078d7; }
+.btn.orange { background: #ff9500; }
+.btn.green { background: #28a745; }
+.btn.red { background: #dc3545; }
 
-section {
-  border: 1px solid #444;
-  padding: 15px;
-  margin-top: 20px;
-  border-radius: 8px;
+/* Status badges */
+.status {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  text-transform: capitalize;
+  font-weight: 600;
+}
+.status-yellow {
+  background: #ffcc00;
+  color: #222;
+}
+.status-green {
+  background: #00c851;
+  color: #fff;
+}
+.status-gray {
+  background: #666;
+  color: #fff;
+}
+.status-red {
+  background: #ff4444;
+  color: #fff;
 }
