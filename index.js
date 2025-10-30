@@ -6,6 +6,7 @@ const stop = require('./stopWorld');
 const list = require('./listWorlds');
 const edit = require('./editWorld');
 const presign = require('./presignUpload');
+const deleteWorld = require('./delete');
 
 exports.handler = async (event) => {
     const httpMethod = event.httpMethod || event.requestContext?.http?.method;
@@ -29,7 +30,7 @@ exports.handler = async (event) => {
         } else if (path === '/worlds/upload' && httpMethod === 'POST') {
             return await presign.handler(event);
         } else if (path === '/worlds/delete' && httpMethod === 'DELETE') {
-            return await presign.handler(event);
+            return await deleteWorld.handler(event);
         }
 
         return {
