@@ -5,39 +5,39 @@ const TABLE = process.env.DDB_TABLE;
 exports.handler = async (event) => {
   try {
     const body = JSON.parse(event.body || '{}');
-    const displayName = body.displayName; // ใช้ displayName เป็นตัวอ้างอิง
-    const newName = body.newName;
+    const worldId = body.worldId;       // ใช้ worldId เป็นคีย์หลัก
+    const displayName = body.displayName; // ชื่อใหม่ที่ต้องการตั้ง
 
-    if (!displayName || !newName) {
-      return { statusCode: 400, body: 'Missing displayName or newName' };
+    if (!worldId || !displayName) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: 'Missing worldId or displayName' }),
+      };
     }
 
-    // หา worldId จาก displayName ก่อน (เพราะ DynamoDB ใช้ worldId เป็น key)
-    const result = await ddb.scan({
-      TableName: TABLE,
-      FilterExpression: '#dn = :dn',
-      ExpressionAttributeNames: { '#dn': 'displayName' },
-      ExpressionAttributeValues: { ':dn': displayName }
-    }).promise();
+    // อัปเดตชื่อใหม่ใน DynamoDB
+    await ddb
+      .update({
+        TableName: TABLE,
+        Key: { worldId },
+        UpdateExpression: 'SET #dn = :newName, lastModified = :now',
+        ExpressionAttributeNames: { '#dn': 'displayName' },
+        ExpressionAttributeValues: {
+          ':newName': displayName,
+          ':now': new Date().toISOString(),
+        },
+      })
+      .promise();
 
-    if (result.Items.length === 0) {
-      return { statusCode: 404, body: 'World not found' };
-    }
-
-    const worldId = result.Items[0].worldId;
-
-    // อัปเดตชื่อใหม่
-    await ddb.update({
-      TableName: TABLE,
-      Key: { worldId },
-      UpdateExpression: 'SET #dn = :new',
-      ExpressionAttributeNames: { '#dn': 'displayName' },
-      ExpressionAttributeValues: { ':new': newName }
-    }).promise();
-
-    return { statusCode: 200, body: JSON.stringify({ message: 'Updated' }) };
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ message: 'Display name updated successfully' }),
+    };
   } catch (err) {
     console.error(err);
-    return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: err.message }),
+    };
   }
 };

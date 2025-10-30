@@ -105,17 +105,25 @@ async function stopWorld(s3Key) {
 }
 
 //edit world name
-async function editWorldPrompt(displayName) {
+async function editWorldPrompt(worldId, displayName) {
   const newName = prompt(`Rename world "${displayName}" to:`);
   if (!newName) return;
 
-  await fetch(`${API_BASE}worlds/edit`, {
+  const res = await fetch(`${API_BASE}worlds/edit`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ displayName, newName }),
+    body: JSON.stringify({
+      worldId,       // ใช้ worldId เป็นตัวอ้างอิงที่ไม่ซ้ำ
+      displayName: newName  // เปลี่ยนชื่อที่แสดงผลใน DynamoDB
+    }),
   });
 
-  alert(`Renamed ${displayName} to ${newName}`);
+  if (!res.ok) {
+    alert("Failed to rename world.");
+    return;
+  }
+
+  alert(`Renamed "${displayName}" to "${newName}"`);
   listWorlds();
 }
 listWorlds();
