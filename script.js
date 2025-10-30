@@ -89,7 +89,7 @@ async function listWorlds() {
     const disableOther  = anyLoading;
 
     
-    const statusColor = world.status === 'running' ? 'status-green' : 'status-red';
+    const statusColor = world.status.toLowerCase().trim() === 'running' ? 'status-green' : 'status-red';
 
     div.innerHTML = `
       <div class="world-header">
