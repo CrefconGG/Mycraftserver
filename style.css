@@ -1,92 +1,196 @@
-/* Layout */
+/* ==== GLOBAL STYLE ==== */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #121212;
+  color: #eaeaea;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 {
+  margin-top: 40px;
+  font-size: 2rem;
+  letter-spacing: 1px;
+  color: #00c851;
+  text-align: center;
+  text-shadow: 0 0 10px #00c85177;
+}
+
+h2 {
+  color: #fff;
+  border-left: 4px solid #00c851;
+  padding-left: 8px;
+  margin-bottom: 10px;
+}
+
+/* ==== SECTIONS ==== */
+section {
+  background-color: #1e1e1e;
+  border-radius: 12px;
+  padding: 20px;
+  width: 90%;
+  max-width: 700px;
+  margin: 20px auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  transition: transform 0.2s ease;
+}
+section:hover {
+  transform: translateY(-2px);
+}
+
+/* ==== UPLOAD FORM ==== */
+#upload {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+#upload input[type="file"] {
+  background-color: #2b2b2b;
+  border: 1px solid #444;
+  color: #fff;
+  padding: 8px;
+  border-radius: 6px;
+  width: 100%;
+}
+
+#upload input[type="text"] {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background: #2b2b2b;
+  color: #fff;
+  outline: none;
+  transition: border 0.2s ease;
+}
+#upload input[type="text"]:focus {
+  border-color: #00c851;
+}
+
+/* ==== BUTTON ==== */
+button {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: opacity 0.2s ease, transform 0.1s ease;
+}
+button:hover {
+  opacity: 0.9;
+  transform: scale(1.03);
+}
+button:active {
+  transform: scale(0.98);
+}
+
+/* Specific button colors */
+button[onclick*="uploadWorld"] {
+  background-color: #0078d7;
+}
+
+/* ==== WORLD LIST ==== */
 #worldList {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  margin: 20px auto;
-  max-width: 700px;
-  font-family: "Segoe UI", Roboto, sans-serif;
 }
 
-/* Card */
+/* Each world card */
 .world-card {
-  background: #1e1e1e;
-  color: #eaeaea;
-  border-radius: 12px;
-  padding: 16px 20px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  background-color: #262626;
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 .world-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6);
 }
 
-/* Header */
+/* Header (world name + status) */
 .world-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 .world-name {
   font-size: 1.1rem;
+  font-weight: bold;
+  color: #fff;
 }
 
-/* Created Info */
+/* Status colors */
+.status {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+.status-yellow { background: #ffcc00; color: #222; }
+.status-green { background: #00c851; color: #fff; }
+.status-gray  { background: #666; color: #fff; }
+.status-red   { background: #ff4444; color: #fff; }
+
+/* Info text (created date) */
 .world-info {
-  margin-top: 6px;
   color: #aaa;
+  font-size: 0.85rem;
 }
 
-/* Buttons */
+/* Buttons inside card */
 .world-buttons {
-  margin-top: 12px;
   display: flex;
-  gap: 8px;
   flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
 }
+
 .btn {
   border: none;
   border-radius: 6px;
   padding: 6px 12px;
   cursor: pointer;
   color: #fff;
-  font-size: 0.9rem;
   font-weight: 500;
+  font-size: 0.9rem;
   transition: opacity 0.2s ease, transform 0.1s ease;
 }
 .btn:hover {
   opacity: 0.9;
-  transform: scale(1.03);
+  transform: scale(1.05);
+}
+.btn:active {
+  transform: scale(0.95);
 }
 
-/* Button colors */
+/* Button color themes */
 .btn.blue { background: #0078d7; }
 .btn.orange { background: #ff9500; }
 .btn.green { background: #28a745; }
 .btn.red { background: #dc3545; }
 
-/* Status badges */
-.status {
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  text-transform: capitalize;
-  font-weight: 600;
-}
-.status-yellow {
-  background: #ffcc00;
-  color: #222;
-}
-.status-green {
-  background: #00c851;
-  color: #fff;
-}
-.status-gray {
-  background: #666;
-  color: #fff;
-}
-.status-red {
-  background: #ff4444;
-  color: #fff;
+/* ==== RESPONSIVE ==== */
+@media (max-width: 500px) {
+  h1 { font-size: 1.6rem; }
+  section { padding: 15px; }
+  .world-buttons { flex-direction: column; align-items: stretch; }
 }
