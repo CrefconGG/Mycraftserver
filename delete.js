@@ -3,7 +3,7 @@ const ddb = new AWS.DynamoDB.DocumentClient();
 const s3 = new AWS.S3();
 
 const TABLE = process.env.DDB_TABLE;
-const BUCKET = process.env.BUCKET_NAME;
+const BUCKET = process.env.WORLD_BUCKET;
 
 exports.handler = async (event) => {
   try {
