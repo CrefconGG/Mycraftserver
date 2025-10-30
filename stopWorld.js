@@ -20,7 +20,7 @@ exports.handler = async (event) => {
       `cd /home/ec2-user/minecraft`,
       `zip -r /tmp/${worldId}-$TIMESTAMP.zip world`,
       `aws s3 cp /tmp/${worldId}-$TIMESTAMP.zip s3://${S3_BUCKET}/backups/${worldId}/`
-      `aws s3 cp /tmp/${worldId}-${timestamp}.zip s3://${S3_BUCKET}/worlds/${worldId}.zip`
+      `aws s3 cp /tmp/${worldId}-$TIMESTAMP.zip s3://${S3_BUCKET}/worlds/${worldId}.zip`
     ];
 
     await ssm.sendCommand({
