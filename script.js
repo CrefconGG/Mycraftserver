@@ -9,26 +9,24 @@ async function uploadWorld() {
   }
 
   const file = fileInput.files[0];
-  const worldName = nameInput.value; // ชื่อที่แสดงผล
-  
+  const worldName = nameInput.value;
 
-  // Get presigned URL
+  // 1. Get presigned URL
   const presignRes = await fetch(`${API_BASE}worlds/upload`, {
     method: "POST",
-    // ส่งชื่อไฟล์ (worldId) ไปให้ presignUpload
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({}),
   });
-  
-  
+
   if (!presignRes.ok) {
      alert("Failed to get upload URL.");
      return;
   }
-  
-  const { uploadUrl, key: s3Key } = await presignRes.json(); // presignUpload.js ส่ง 'key' ไม่ใช่ 's3Key'
 
-  // Upload to S3 directly
+  const { uploadUrl, key: s3Key, worldId } = await presignRes.json();
+  const displayName = worldName;
+
+  // 2. Upload file to S3
   const uploadRes = await fetch(uploadUrl, {
     method: "PUT",
     headers: { "Content-Type": "application/zip" },
@@ -40,14 +38,14 @@ async function uploadWorld() {
     return;
   }
 
-  // 🔹 4. สร้าง world entry ใน DynamoDB
+  // 3. Create world entry in DynamoDB
   const createRes = await fetch(`${API_BASE}worlds`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      worldId,      // ใช้ worldId ที่ได้จาก presignUpload
-      s3Key,        // ใช้ key ที่ presign ให้มา เช่น worlds/world-xxxx.zip
-      displayName,  // ชื่อโลกที่ผู้ใช้กรอก
+      worldId,
+      s3Key,
+      displayName,
     }),
   });
 
@@ -61,9 +59,10 @@ async function uploadWorld() {
   alert(`World "${createdWorld.displayName}" uploaded successfully!`);
   listWorlds();
 }
+
 //show all worlds
 async function listWorlds() {
-  const res = await fetch(`${API_BASE}worlds`, {method: "GET"});
+  const res = await fetch(`${API_BASE}worlds`, { method: "GET" });
   const data = await res.json();
   const container = document.getElementById("worldList");
   container.innerHTML = "";
@@ -74,45 +73,34 @@ async function listWorlds() {
     div.innerHTML = `
       <span><b>${world.displayName}</b> - ${world.status}</span>
       <div>
-        <button onclick="launchWorld('${world.displayName}')">Launch</button>
-        <button onclick="stopWorld('${world.displayName}')">Stop</button>
-        <button onclick="editWorldPrompt('${world.displayName}')">Edit</button>
+        <button onclick="launchWorld('${world.s3Key}')">Launch</button>
+        <button onclick="stopWorld('${world.s3Key}')">Stop</button>
+        <button onclick="editWorldPrompt('${world.worldId}', '${world.displayName}')">Edit</button>
       </div>
     `;
     container.appendChild(div);
   });
 }
+
 //start world
-async function launchWorld(worldName) {
+async function launchWorld(s3Key) {
   await fetch(`${API_BASE}worlds/launch`, {
     method: "POST",
-    body: JSON.stringify({ worldName }),
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ s3Key }), // ส่ง s3Key แทน worldId
   });
-  alert(`Launching ${worldName}`);
+  alert(`Launching ${s3Key}`);
   listWorlds();
 }
+
 //stop world
-async function stopWorld(worldName) {
+async function stopWorld(s3Key) {
   await fetch(`${API_BASE}worlds/stop`, {
     method: "POST",
-    body: JSON.stringify({ worldName }),
-  });
-  alert(`Stopping ${worldName}`);
-  listWorlds();
-}
-//edit world name
-async function editWorldPrompt(displayName) {
-  const newName = prompt(`Rename world "${displayName}" to:`);
-  if (!newName) return;
-
-  await fetch(`${API_BASE}worlds/edit`, {
-    method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ displayName, newName }),
+    body: JSON.stringify({ s3Key }), // ส่ง s3Key แทน worldId
   });
-
-  alert(`Renamed ${displayName} to ${newName}`);
+  alert(`Stopping ${s3Key}`);
   listWorlds();
 }
-
 listWorlds();
