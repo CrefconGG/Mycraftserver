@@ -74,7 +74,7 @@ async function listWorlds() {
       <span><b>${world.displayName}</b> - ${world.status}</span>
       <div>
         <button onclick="launchWorld('${world.s3Key}')">Launch</button>
-        <button onclick="stopWorld('${world.s3Key}')">Stop</button>
+        <button onclick="stopWorld('${world.worldId}')">Stop</button>
         <button onclick="editWorldPrompt('${world.worldId}', '${world.displayName}')">Edit</button>
       </div>
     `;
@@ -94,13 +94,13 @@ async function launchWorld(s3Key) {
 }
 
 //stop world
-async function stopWorld(s3Key) {
+async function stopWorld(worldId) {
   await fetch(`${API_BASE}worlds/stop`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ s3Key }), // ส่ง s3Key แทน worldId
+    body: JSON.stringify({ worldId }),
   });
-  alert(`Stopping ${s3Key}`);
+  alert(`Stopping ${worldId}`);
   listWorlds();
 }
 
