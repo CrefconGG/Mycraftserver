@@ -11,17 +11,16 @@ async function uploadWorld() {
   const file = fileInput.files[0];
   const worldName = nameInput.value; // ชื่อที่แสดงผล
   
-  // **การแก้ไข:** สร้าง worldId (เช่น myworld.zip)
-  const worldId = `${worldName.replace(/[^a-z0-9]/gi, '_')}.zip`; // worldId ควรเป็น unique key
 
   // Get presigned URL
   const presignRes = await fetch(`${API_BASE}worlds/upload`, {
     method: "POST",
     // ส่งชื่อไฟล์ (worldId) ไปให้ presignUpload
-    body: JSON.stringify({ filename: worldId }),
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({}),
   });
   
-  // ตรวจสอบ Error ที่นี่ก็ดี
+  
   if (!presignRes.ok) {
      alert("Failed to get upload URL.");
      return;
@@ -36,14 +35,30 @@ async function uploadWorld() {
     body: file,
   });
 
-  //  Save metadata in DynamoDB (Path ถูกแก้ในข้อ 1.1 แล้ว)
-  await fetch(`${API_BASE}worlds`, {
+  if (!uploadRes.ok) {
+    alert("Upload failed.");
+    return;
+  }
+
+  // 🔹 4. สร้าง world entry ใน DynamoDB
+  const createRes = await fetch(`${API_BASE}worlds/create`, {
     method: "POST",
-    // ส่ง worldId, displayName และ s3Key
-    body: JSON.stringify({ worldId, displayName: worldName, s3Key }), 
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      worldId,      // ใช้ worldId ที่ได้จาก presignUpload
+      s3Key,        // ใช้ key ที่ presign ให้มา เช่น worlds/world-xxxx.zip
+      displayName,  // ชื่อโลกที่ผู้ใช้กรอก
+    }),
   });
 
-  alert("World uploaded successfully!");
+  if (!createRes.ok) {
+    alert("Failed to save world info to database.");
+    return;
+  }
+
+  const createdWorld = await createRes.json();
+
+  alert(`World "${createdWorld.displayName}" uploaded successfully!`);
   listWorlds();
 }
 //show all worlds

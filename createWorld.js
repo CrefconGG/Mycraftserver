@@ -1,7 +1,6 @@
 // createWorld.js
 const AWS = require('aws-sdk');
 const ddb = new AWS.DynamoDB.DocumentClient();
-const { randomUUID } = require('crypto');
 
 const TABLE = process.env.DDB_TABLE;
 
@@ -9,24 +8,14 @@ exports.handler = async (event) => {
   try {
     const body = JSON.parse(event.body || '{}');
 
-    
-    let worldId = body.worldId || (body.s3Key && body.s3Key.split('/').pop()) || 'world';
-    
-    // เพิ่ม unique suffix จาก UUID
-    const uniqueSuffix = randomUUID().substring(0, 8);
-    
-    
-    if (worldId.endsWith('.zip')) {
-      worldId = `${worldId.replace(/\.zip$/, '')}-${uniqueSuffix}`;
-    } else {
-      worldId = `${worldId}-${uniqueSuffix}`;
-    }
+    // ใช้ worldId จาก presignUpload ถ้ามี
+    let worldId = body.worldId;
 
     // สร้าง item สำหรับ DynamoDB
     const item = {
       worldId,
       displayName: body.displayName || worldId,
-      s3Key: body.s3Key || null,
+      s3Key: body.s3Key || `worlds/${worldId}.zip`,
       status: 'STOPPED',
       lastModified: new Date().toISOString()
     };
