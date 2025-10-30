@@ -30,6 +30,53 @@ h2 {
   padding-left: 8px;
   margin-bottom: 10px;
 }
+/* ==== SERVER IP PANEL ==== */
+#server-ip-panel {
+  background: linear-gradient(90deg, #00c85133, #0078d733);
+  border: 1px solid #00c851;
+  border-radius: 10px;
+  padding: 14px 20px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  width: 90%;
+  max-width: 700px;
+  box-shadow: 0 0 15px rgba(0, 200, 81, 0.3);
+}
+
+#server-ip-panel .label {
+  color: #aaa;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+#server-ip-panel .ip {
+  font-size: 1.4rem;
+  color: #00ff99;
+  font-weight: bold;
+  text-shadow: 0 0 10px #00ff9977;
+}
+
+#server-ip-panel button {
+  background: #00c851;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+#server-ip-panel button:hover {
+  background: #00ff99;
+  transform: scale(1.05);
+}
+#server-ip-panel button:active {
+  transform: scale(0.95);
+}
 
 /* ==== SECTIONS ==== */
 section {
