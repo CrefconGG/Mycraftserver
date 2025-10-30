@@ -29,13 +29,13 @@ async function uploadWorld() {
   const { uploadUrl, key: s3Key } = await presignRes.json(); // presignUpload.js ส่ง 'key' ไม่ใช่ 's3Key'
 
   // Upload to S3 directly
-  await fetch(uploadUrl, {
+  const uploadRes = await fetch(uploadUrl, {
     method: "PUT",
     headers: { "Content-Type": "application/zip" },
     body: file,
   });
 
-  if (!uploadUrl.ok) {
+  if (!uploadRes.ok) {
     alert("Upload failed.");
     return;
   }
