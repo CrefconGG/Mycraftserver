@@ -1,5 +1,5 @@
 const API_BASE = "https://0n63psw8x9.execute-api.us-east-1.amazonaws.com/test1/";
-
+let isLoading = false;
 async function uploadWorld() {
   const fileInput = document.getElementById("worldFile");
   const nameInput = document.getElementById("worldName");
@@ -68,47 +68,54 @@ async function listWorlds() {
   container.innerHTML = "";
 
   data.forEach(world => {
-    const div = document.createElement("div");
-    div.className = "world-card";
+  const div = document.createElement("div");
+  div.className = "world-card";
 
-    const lastModified = new Date(world.lastModified || world.timestamp || Date.now())
-      .toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" });
+  const isLoading = loadingWorldId === world.worldId;
+  const launchText = isLoading && loadingAction === 'launch' ? 'Launching...' : 'Launch';
+  const stopText = isLoading && loadingAction === 'stop' ? 'Stopping...' : 'Stop';
+  const launchSpinner = isLoading && loadingAction === 'launch' ? '<span class="spinner"></span>' : '';
+  const stopSpinner = isLoading && loadingAction === 'stop' ? '<span class="spinner"></span>' : '';
 
-    const statusClass = {
-      starting: "status-yellow",
-      running: "status-green",
-      stopped: "status-gray",
-      error: "status-red"
-    }[world.status?.toLowerCase()] || "status-gray";
+  div.innerHTML = `
+    <div class="world-header">
+      <span class="world-name">${world.displayName}</span>
+      <span class="status status-${world.status}">${world.status}</span>
+    </div>
+    <div class="world-info">Last modified: ${new Date(world.lastModified).toLocaleString()}</div>
+    <div class="world-buttons">
+      <button class="btn green" onclick="launchWorld('${world.worldId}')" 
+        ${world.status === 'running' || anyRunning || isLoading ? 'disabled' : ''}>
+        ${launchText} ${launchSpinner}
+      </button>
+      <button class="btn red" onclick="stopWorld('${world.worldId}')" 
+        ${world.status === 'stopped' || isLoading ? 'disabled' : ''}>
+        ${stopText} ${stopSpinner}
+      </button>
+      <button class="btn blue" onclick="editWorldPrompt('${world.worldId}', '${world.displayName}')" 
+        ${world.status === 'running' || isLoading ? 'disabled' : ''}>Edit</button>
+      <button class="btn orange" onclick="deleteWorld('${world.worldId}')" 
+        ${world.status === 'running' || isLoading ? 'disabled' : ''}>Delete</button>
+    </div>
+  `;
 
-    div.innerHTML = `
-      <div class="world-header">
-        <span class="world-name"><b>${world.displayName}</b></span>
-        <span class="status ${statusClass}">${world.status || "Unknown"}</span>
-      </div>
-      <div class="world-info">
-        <small>Created: ${lastModified}</small>
-      </div>
-      <div class="world-buttons">
-        <button class="btn blue" onclick="launchWorld('${world.s3Key}')">Launch</button>
-        <button class="btn orange" onclick="stopWorld('${world.worldId}')">Stop</button>
-        <button class="btn green" onclick="editWorldPrompt('${world.worldId}', '${world.displayName}')">Edit</button>
-        <button class="btn red" onclick="deleteWorldPrompt('${world.worldId}', '${world.displayName}')">Delete</button>
-      </div>
-    `;
-    container.appendChild(div);
-  });
+  container.appendChild(div);
+});
+
 }
 
 
 //start world
 async function launchWorld(s3Key) {
+  if (isLoading) return;
+  isLoading = true;
   await fetch(`${API_BASE}worlds/launch`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ s3Key }), // ส่ง s3Key แทน worldId
   });
   alert(`Launching ${s3Key}`);
+  isLoading = false;
   listWorlds();
 }
 

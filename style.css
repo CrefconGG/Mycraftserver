@@ -235,6 +235,24 @@ button[onclick*="uploadWorld"] {
 .btn.green { background: #28a745; }
 .btn.red { background: #dc3545; }
 
+/* Spinner */
+.spinner {
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid #fff;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  margin-left: 8px;
+  animation: spin 1s linear infinite;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 /* ==== RESPONSIVE ==== */
 @media (max-width: 500px) {
   h1 { font-size: 1.6rem; }
