@@ -35,13 +35,13 @@ async function uploadWorld() {
     body: file,
   });
 
-  if (!uploadRes.ok) {
+  if (!uploadUrl.ok) {
     alert("Upload failed.");
     return;
   }
 
   // 🔹 4. สร้าง world entry ใน DynamoDB
-  const createRes = await fetch(`${API_BASE}worlds/create`, {
+  const createRes = await fetch(`${API_BASE}worlds`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
