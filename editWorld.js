@@ -15,7 +15,6 @@ exports.handler = async (event) => {
       };
     }
 
-    // อัปเดตชื่อใหม่ใน DynamoDB
     await ddb
       .update({
         TableName: TABLE,

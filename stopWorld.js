@@ -13,7 +13,7 @@ exports.handler = async (event) => {
     const worldId = body.worldId;
     if (!worldId) return { statusCode: 400, body: 'worldId required' };
 
-    // 1) Trigger SSM RunCommand on EC2 to create backup and upload to S3
+    // Trigger SSM RunCommand on EC2 to create backup and upload to S3
     const commands = [
       'TIMESTAMP=$(date +%Y%m%d-%H%M%S)',
       `cd /home/ec2-user/minecraft`,
@@ -28,11 +28,11 @@ exports.handler = async (event) => {
       Parameters: { commands },
     }).promise();
 
-    // 2) Stop instance
+    // Stop instance
     await ec2.stopInstances({ InstanceIds: [INSTANCE_ID] }).promise();
     await ec2.waitFor('instanceStopped', { InstanceIds: [INSTANCE_ID] }).promise();
 
-    // 3) Update DynamoDB: set status STOPPED
+    // Update DynamoDB: set status STOPPED
     await dynamodb.update({
       TableName: process.env.DDB_TABLE,
       Key: { worldId },

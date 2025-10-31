@@ -13,7 +13,7 @@ async function uploadWorld() {
   const file = fileInput.files[0];
   const worldName = nameInput.value;
 
-  // 1. Get presigned URL
+  // Get presigned URL
   const presignRes = await fetch(`${API_BASE}worlds/upload`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -28,7 +28,7 @@ async function uploadWorld() {
   const { uploadUrl, key: s3Key, worldId } = await presignRes.json();
   const displayName = worldName;
 
-  // 2. Upload file to S3
+  // Upload file to S3
   const uploadRes = await fetch(uploadUrl, {
     method: "PUT",
     headers: { "Content-Type": "application/zip" },
@@ -40,7 +40,7 @@ async function uploadWorld() {
     return;
   }
 
-  // 3. Create world entry in DynamoDB
+  // Create world entry in DynamoDB
   const createRes = await fetch(`${API_BASE}worlds`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

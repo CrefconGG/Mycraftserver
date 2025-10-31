@@ -7,12 +7,10 @@ exports.handler = async (event) => {
   try {
     const body = JSON.parse(event.body || '{}');
 
-    // สร้าง worldId แบบเดียวกับ createWorld
     const worldId = `world-${randomUUID().substring(0, 8)}`;
     const filename = `${worldId}.zip`;
     const key = `worlds/${filename}`;
 
-    // สร้าง presigned URL สำหรับอัปโหลดไฟล์
     const url = s3.getSignedUrl('putObject', {
       Bucket: process.env.WORLD_BUCKET,
       Key: key,
@@ -20,7 +18,6 @@ exports.handler = async (event) => {
       ContentType: 'application/zip',
     });
 
-    // ส่งกลับ worldId
     return {
       statusCode: 200,
       body: JSON.stringify({ 
