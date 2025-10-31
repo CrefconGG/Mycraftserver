@@ -26,7 +26,7 @@ exports.handler = async (event) => {
 
     const s3Key = result.Item.s3Key;
 
-    // delete from s3
+    //delete from s3
     if (s3Key) {
       await s3.deleteObject({
         Bucket: BUCKET,
@@ -34,7 +34,7 @@ exports.handler = async (event) => {
       }).promise();
     }
 
-    // delete from dynamoDB
+    //delete from dynamoDB
     await ddb.delete({
       TableName: TABLE,
       Key: { worldId },

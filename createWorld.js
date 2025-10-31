@@ -10,7 +10,7 @@ exports.handler = async (event) => {
 
     let worldId = body.worldId;
 
-    // สร้าง item สำหรับ DynamoDB
+    
     const item = {
       worldId,
       displayName: body.displayName || worldId,
@@ -19,7 +19,7 @@ exports.handler = async (event) => {
       lastModified: new Date().toISOString()
     };
 
-    // บันทึกลง DynamoDB
+    
     await ddb.put({ TableName: TABLE, Item: item }).promise();
 
     return {

@@ -11,7 +11,7 @@ exports.handler = async (event) => {
     const worldId = body.worldId;
     if (!worldId) return { statusCode: 400, body: 'worldId required' };
 
-    // 1) Update DynamoDB: set status STARTING
+    
     await dynamodb.update({
       TableName: process.env.DDB_TABLE,
       Key: { worldId },
@@ -20,18 +20,17 @@ exports.handler = async (event) => {
       ExpressionAttributeValues: { ':s': 'STARTING' }
     }).promise();
 
-    // 2) Tag the instance with ActiveWorld
+    //Tag the instance with ActiveWorld
     await ec2.createTags({
       Resources: [INSTANCE_ID],
       Tags: [{ Key: 'ActiveWorld', Value: worldId }]
     }).promise();
 
-    // 3) Start instance
+    //Start instance
     await ec2.startInstances({ InstanceIds: [INSTANCE_ID] }).promise();
-    // Optionally wait until running
     await ec2.waitFor('instanceRunning', { InstanceIds: [INSTANCE_ID] }).promise();
 
-    // 4) update dynamo status RUNNING and ec2InstanceId
+    //update dynamo
     await dynamodb.update({
       TableName: process.env.DDB_TABLE,
       Key: { worldId },

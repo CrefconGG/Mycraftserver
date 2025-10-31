@@ -208,7 +208,6 @@ function copyServerIp() {
         console.error("Failed to copy IP:", err);
       });
   } else {
-    // Fallback
     const tempInput = document.createElement("input");
     tempInput.value = ipText;
     document.body.appendChild(tempInput);
