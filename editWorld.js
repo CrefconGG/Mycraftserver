@@ -5,8 +5,8 @@ const TABLE = process.env.DDB_TABLE;
 exports.handler = async (event) => {
   try {
     const body = JSON.parse(event.body || '{}');
-    const worldId = body.worldId;       // ใช้ worldId เป็นคีย์หลัก
-    const displayName = body.displayName; // ชื่อใหม่ที่ต้องการตั้ง
+    const worldId = body.worldId;
+    const displayName = body.displayName;
 
     if (!worldId || !displayName) {
       return {

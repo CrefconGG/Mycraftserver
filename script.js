@@ -83,7 +83,7 @@ async function listWorlds() {
     const launchSpinner = isLoading && loadingAction === 'launch' ? '<span class="spinner"></span>' : '';
     const stopSpinner   = isLoading && loadingAction === 'stop'   ? '<span class="spinner"></span>' : '';
 
-    // Disable logic:
+    // Disable logic
     const disableLaunch = world.status === 'running' || anyRunning || anyLoading;
     const disableStop   = world.status === 'stopped' || anyLoading;
     const disableOther  = anyLoading;
@@ -128,7 +128,7 @@ async function launchWorld(s3Key, worldId) {
   await fetch(`${API_BASE}worlds/launch`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ s3Key }), // ส่ง s3Key แทน worldId
+    body: JSON.stringify({ s3Key }),
   });
   alert(`Launching ${s3Key}`);
   loadingWorldId = null;
@@ -163,8 +163,8 @@ async function editWorldPrompt(worldId, displayName) {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      worldId,       // ใช้ worldId เป็นตัวอ้างอิงที่ไม่ซ้ำ
-      displayName: newName  // เปลี่ยนชื่อที่แสดงผลใน DynamoDB
+      worldId,
+      displayName: newName
     }),
   });
 
@@ -208,7 +208,7 @@ function copyServerIp() {
         console.error("Failed to copy IP:", err);
       });
   } else {
-    // Fallback แบบใช้ input
+    // Fallback
     const tempInput = document.createElement("input");
     tempInput.value = ipText;
     document.body.appendChild(tempInput);

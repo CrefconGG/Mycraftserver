@@ -3,7 +3,7 @@ const AWS = require('aws-sdk');
 const ec2 = new AWS.EC2({region: process.env.AWS_REGION});
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-const INSTANCE_ID = process.env.EC2_INSTANCE_ID; // or determine dynamically
+const INSTANCE_ID = process.env.EC2_INSTANCE_ID;
 
 exports.handler = async (event) => {
   try {

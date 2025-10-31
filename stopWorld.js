@@ -14,7 +14,6 @@ exports.handler = async (event) => {
     if (!worldId) return { statusCode: 400, body: 'worldId required' };
 
     // 1) Trigger SSM RunCommand on EC2 to create backup and upload to S3
-    // Requires SSMAgent and IAM role for EC2 to allow s3:PutObject
     const commands = [
       'TIMESTAMP=$(date +%Y%m%d-%H%M%S)',
       `cd /home/ec2-user/minecraft`,
@@ -29,7 +28,6 @@ exports.handler = async (event) => {
       Parameters: { commands },
     }).promise();
 
-    // Optionally wait or poll command invocation to finish — for simplicity we wait a fixed time or poll
     // 2) Stop instance
     await ec2.stopInstances({ InstanceIds: [INSTANCE_ID] }).promise();
     await ec2.waitFor('instanceStopped', { InstanceIds: [INSTANCE_ID] }).promise();

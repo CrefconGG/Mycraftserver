@@ -1,4 +1,4 @@
-/* ==== GLOBAL STYLE ==== */
+/*  GLOBAL STYLE  */
 * {
   box-sizing: border-box;
 }
@@ -14,18 +14,18 @@ body {
   flex-direction: column;
   align-items: center;
 
-  background-image: url('./images/mineCraft-bg.jpg'); /* ใส่ path ของภาพ bg ของคุณ */
-  background-size: cover;      /* ปรับให้เต็มหน้าจอ */
+  background-image: url('./images/mineCraft-bg.jpg');
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  color: #eaeaea; /* ให้ข้อความอ่านง่ายบนพื้นหลัง */
+  color: #eaeaea;
 }
 
 body::before {
   content: '';
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.3); /* ครึ่งโปร่ง */
+  background: rgba(0,0,0,0.3);
   z-index: -1;
 }
 
@@ -92,7 +92,7 @@ h2 {
   transform: scale(0.95);
 }
 
-/* ==== SECTIONS ==== */
+/*  SECTIONS  */
 section {
   background-color: #1e1e1e;
   border-radius: 12px;
@@ -107,7 +107,7 @@ section:hover {
   transform: translateY(-2px);
 }
 
-/* ==== UPLOAD FORM ==== */
+/*  UPLOAD FORM  */
 #upload {
   display: flex;
   flex-direction: column;
@@ -138,7 +138,7 @@ section:hover {
   border-color: #00c851;
 }
 
-/* ==== BUTTON ==== */
+/*  BUTTON  */
 button {
   padding: 8px 14px;
   border-radius: 6px;
@@ -162,7 +162,7 @@ button[onclick*="uploadWorld"] {
   background-color: #0078d7;
 }
 
-/* ==== WORLD LIST ==== */
+/*  WORLD LIST  */
 #worldList {
   display: flex;
   flex-direction: column;
@@ -210,7 +210,7 @@ button[onclick*="uploadWorld"] {
 .status-green { background: #00c851; color: #fff; }
 .status-red   { background: #ff4444; color: #fff; }
 
-/* Info text (created date) */
+/* Info text */
 .world-info {
   color: #aaa;
   font-size: 0.85rem;
@@ -266,7 +266,7 @@ button[onclick*="uploadWorld"] {
   100% { transform: rotate(360deg); }
 }
 
-/* ==== RESPONSIVE ==== */
+/*  RESPONSIVE  */
 @media (max-width: 500px) {
   h1 { font-size: 1.6rem; }
   section { padding: 15px; }

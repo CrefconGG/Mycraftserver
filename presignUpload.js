@@ -26,7 +26,7 @@ exports.handler = async (event) => {
       body: JSON.stringify({ 
         uploadUrl: url, 
         key,
-        worldId // สำคัญมาก — ใช้ต่อใน createWorld
+        worldId
       }),
     };
   } catch (err) {

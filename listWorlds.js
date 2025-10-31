@@ -6,7 +6,7 @@ const TABLE = process.env.DDB_TABLE;
 
 exports.handler = async () => {
   try {
-    const data = await ddb.scan({ TableName: TABLE }).promise(); // small scale ok
+    const data = await ddb.scan({ TableName: TABLE }).promise();
     const items = data.Items || [];
     return { statusCode: 200, body: JSON.stringify(items) };
   } catch (err) {

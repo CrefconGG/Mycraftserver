@@ -8,7 +8,6 @@ exports.handler = async (event) => {
   try {
     const body = JSON.parse(event.body || '{}');
 
-    // ใช้ worldId จาก presignUpload ถ้ามี
     let worldId = body.worldId;
 
     // สร้าง item สำหรับ DynamoDB
